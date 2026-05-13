@@ -1,0 +1,55 @@
+name: Playwright Tests
+
+
+on:
+  push:
+  pull_request:
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+
+    steps:
+
+
+      # 1. Checkout repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+
+      # 2. Install Node.js
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+
+      # 4. Install Playwright browsers
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+
+      # 5. Run Playwright tests
+      - name: Run Playwright tests
+        run: npx playwright test
+
+
+      # 6. Show generated report files
+      - name: List report files
+        run: ls -R playwright-report || true
+
+
+      # 7. Upload HTML report
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report
